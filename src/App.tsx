@@ -74,10 +74,11 @@ export default function App() {
   );
 
   const handlePullRefresh = useCallback(() => {
+    setSelectCategory(selectedCategory);
     setProducts([]);
     setPage(1);
-    setSelectCategory(selectedCategory);
-  }, [setProducts, setPage, setSelectCategory]);
+    if (page === 1) getProducts(selectedCategory, 1);
+  }, [setProducts, setPage, setSelectCategory, getProducts, selectedCategory]);
 
   const fetchMore = useCallback(() => {
     if (totalPage > page && products.length > 0)
@@ -129,7 +130,7 @@ export default function App() {
           refreshControl={
             <RefreshControl
               onRefresh={handlePullRefresh}
-              refreshing={initLoading}
+              refreshing={initLoading && products.length === 0}
             />
           }
         />
